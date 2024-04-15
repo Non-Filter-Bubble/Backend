@@ -1,0 +1,14 @@
+Dockerfile
+.github
+build.gradle jar{어쩌구}
+config 폴더에 WebMvcConfig
+
+BookServiceApplication에서 5~7
+
+도커 파일 프로젝트 이름에맞게 변경 완료
+BookService -> book_service
+
+에러 바뀜
+2024/04/14 15:10:55 dial tcp 43.203.38.124:22: i/o timeout
+포트 연결시간 초과
+방화벽..?
