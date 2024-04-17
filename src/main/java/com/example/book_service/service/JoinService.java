@@ -17,7 +17,7 @@ public class JoinService {
     }
 
     public void joinProcess(JoinDTO joinDTO){
-        String loginId = joinDTO.getLoginId();
+        String loginid = joinDTO.getLoginid();
         String username = joinDTO.getUsername();
         String password = joinDTO.getPassword();
 
@@ -29,7 +29,7 @@ public class JoinService {
         }
 
         UserEntity data = new UserEntity();
-        data.setLoginid(loginId);
+        data.setLoginid(loginid);
         data.setUsername(username);
         data.setPassword(bCryptPasswordEncoder.encode(password));
         data.setRole("USER");
