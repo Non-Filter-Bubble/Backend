@@ -14,7 +14,7 @@ public class JWTUtil {
 
     private SecretKey secretKey;
     //생성자 호출될때 application.properties에 저장했던 시크릿 키 불러오기
-    public JWTUtil(@Value("${secrets.spring_jwt_secret}")String secret){
+    public JWTUtil(@Value("${spring.jwt.secret}")String secret){
         //키를 객체타입으로 저장하면서 암호화 저장
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
 

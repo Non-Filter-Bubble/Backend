@@ -18,8 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-# application.properties 파일을 무시
-application.properties
+
 .idea
 *.iws
 *.iml
