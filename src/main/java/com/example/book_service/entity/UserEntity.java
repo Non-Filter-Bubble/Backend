@@ -12,8 +12,8 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //자동 아이디값  생성
     private int userid;
 
-    private String loginid;
     private String username;
+    private String nickname;
     private String password;
     private String role;
 
