@@ -1,8 +1,10 @@
-package com.example.book_service.entity;
+package com.example.book_service.domain.mybook;
 
 
 import com.example.book_service.domain.bookbox.BookboxEntity;
+import com.example.book_service.entity.BookEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +30,9 @@ public class MybookEntity {
     private String review;
 
     private Boolean evaluation;
+
+    public void update(String comment, String review) {
+        this.comment = comment;
+        this.review = review;
+    }
 }
