@@ -1,12 +1,16 @@
-package com.example.book_service.entity;
+package com.example.book_service.domain.bookbox;
 
+import com.example.book_service.entity.UserEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+
 @Getter
-@Setter
+@NoArgsConstructor
+@Entity
 public class BookboxEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,5 +21,11 @@ public class BookboxEntity {
     private UserEntity user;
 
     private String genre;
+
+    @Builder
+    public BookboxEntity(UserEntity user, String genre) {
+        this.user = user;
+        this.genre = genre;
+    }
 
 }
