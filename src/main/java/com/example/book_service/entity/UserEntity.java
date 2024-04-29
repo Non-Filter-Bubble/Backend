@@ -18,5 +18,13 @@ public class UserEntity {
     private String role;
 
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +  // 비밀번호는 로그에 남기지 않는 것이 보안상 좋습니다.
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
 

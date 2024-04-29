@@ -17,6 +17,11 @@ public class JoinController{
         this.joinService = joinService;
     }
 
+    @GetMapping("/join")
+    public String joinPage(){
+        return "join";
+    }
+
 
     @PostMapping("/join")
     public String joinProcess(JoinDTO joinDTO){

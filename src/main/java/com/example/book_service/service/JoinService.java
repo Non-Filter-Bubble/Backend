@@ -41,7 +41,7 @@ public class JoinService {
         data.setNickname(nickname);
         data.setUsername(username);
         data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole("USER");
+        data.setRole("ROLE_USER");
 
         UserEntity savedUser = userRepository.save(data);
 
