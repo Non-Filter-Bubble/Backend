@@ -103,7 +103,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login","/", "/join", "/user/**").permitAll() // 로그인 페이지와 일부 페이지는 모든 사용자에게 허용
-                        .requestMatchers("/admin").hasRole("USER")
+                        .requestMatchers("/admin","/genre").hasRole("USER")
                         .anyRequest().authenticated()); //로그인한 사용자만 접근
 
         http

@@ -29,4 +29,5 @@ public class JoinController{
         joinService.joinProcess(joinDTO);
         return "ok";
     }
+
 }

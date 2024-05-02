@@ -21,7 +21,7 @@ public class MybookEntity {
     private BookboxEntity bookbox;
 
     @ManyToOne
-    @JoinColumn(name = "bookid") // BookEntity 자동 생성된 ID 값을 참조하는 외래 키
+    @JoinColumn(name = "bookid", unique = true) // BookEntity의 ID 값을 참조하는 외래 키
     private BookEntity book;
 
     private String comment;

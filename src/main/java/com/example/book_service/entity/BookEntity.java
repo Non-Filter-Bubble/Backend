@@ -1,5 +1,6 @@
 package com.example.book_service.entity;
 
+import com.example.book_service.domain.mybook.MybookEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,13 +15,15 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookid;
 
+    @ManyToOne
+    @JoinColumn(name = "mybookid")
+    private MybookEntity mybook;
 
-    private String title;
-    private String isbn;
-    private String author;
-    private String publisher;
-    private String summary;
-    private String bookcover; //이미지 주소
-    private String book_genre;
-    private String sentence; //한줄소개
+
+
+    private String ISBN_THIRTEEN_NO;
+    private String GENRE_LV1; //ex.소설,에세이
+    private String GENRE_LV2;   //로맨스,액션,여행
+    private String INFO_TEXT; //한줄소개
+    private String IMAGE;
 }

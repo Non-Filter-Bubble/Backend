@@ -13,9 +13,9 @@ public class GenreEntity {
     private Long genreid;
 
     @ManyToOne
-    @JoinColumn(name = "userid") // UserEntity의 자동 생성된 ID 값을 참조하는 외래 키
+    @JoinColumn(name = "userid",nullable = false) // UserEntity의 자동 생성된 ID 값을 참조하는 외래 키
     private UserEntity user;
 
-    private String fav_genre;
-    private String fav_booktype;
+    private String favGenre;
+    private String favBookType;
 }

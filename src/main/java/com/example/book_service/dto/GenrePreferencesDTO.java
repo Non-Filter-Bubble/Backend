@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class GenreDTO {
+public class GenrePreferencesDTO {
 
-    private String fav_genre;
-    private String fav_booktype;
+    private String favGenre;
+    private String favBookType;
 }
