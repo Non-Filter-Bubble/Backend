@@ -1,16 +1,31 @@
 package com.example.book_service.service;
 
+import com.example.book_service.JWT.JWTUtil;
 import com.example.book_service.dto.JoinDTO;
 import com.example.book_service.dto.bookbox.BookboxSaveRequestDto;
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.repository.UserRepository;
 import com.example.book_service.service.bookbox.BookboxService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.stream.Collectors;
+
 
 @Service
 public class JoinService {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     private final UserRepository userRepository;
 
@@ -25,7 +40,7 @@ public class JoinService {
         this.bookboxService = bookboxService;
     }
 
-    public void joinProcess(JoinDTO joinDTO){
+    public String joinProcess(JoinDTO joinDTO){
         String nickname = joinDTO.getNickname();
         String username = joinDTO.getUsername();
         String password = joinDTO.getPassword();
@@ -34,7 +49,7 @@ public class JoinService {
         Boolean isExist = userRepository.existsByUsername(username);
 
         if(isExist){
-            return;
+            return "Error: User already exists";
         }
 
         UserEntity data = new UserEntity();
@@ -57,5 +72,16 @@ public class JoinService {
 
 
 
+        // 사용자 인증 및 토큰 생성
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        return jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
     }
 }

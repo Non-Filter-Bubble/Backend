@@ -1,6 +1,8 @@
 package com.example.book_service.JWT;
 
 import com.example.book_service.dto.CustomUserDetails;
+import com.example.book_service.dto.LoginDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -28,15 +31,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        //클라이언트 요청에서 username, password 가로채기
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
-
-        System.out.println(username);
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-
-        return authenticationManager.authenticate(authToken);
+//        //클라이언트 요청에서 username, password 가로채기
+//        String username = obtainUsername(request);
+//        String password = obtainPassword(request);
+//
+//        System.out.println(username);
+//
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+//
+//        return authenticationManager.authenticate(authToken);
+        try {
+            LoginDTO credentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    credentials.getUsername(), credentials.getPassword());
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse authentication request body", e);
+        }
     }
 
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
