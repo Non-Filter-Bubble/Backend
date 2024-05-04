@@ -3,10 +3,7 @@ package com.example.book_service.controller;
 import com.example.book_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -36,6 +33,12 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().body("Nickname is already taken");
         }
+    }
+
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(@RequestParam(value = "username") String username) {
+        userService.deleteUser(username);
+        return ResponseEntity.ok().build(); // 성공적으로 처리되었을 때 HTTP 200 OK 응답 반환
     }
 
 

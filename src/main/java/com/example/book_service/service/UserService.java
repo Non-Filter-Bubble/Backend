@@ -2,8 +2,10 @@ package com.example.book_service.service;
 
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -22,6 +24,21 @@ public class UserService {
     public boolean isNicknameAvailable(String nickname) {
         UserEntity user = userRepository.findByNickname(nickname);
         return user ==null;
+    }
+
+    @Transactional
+    public void deleteUser(String username) {
+        UserEntity existingUser = userRepository.findByUsername(username);
+        if (existingUser == null) {
+            throw new UserNotFoundException(username);
+        }
+        userRepository.deleteByUsername(username);
+    }
+
+    public class UserNotFoundException extends RuntimeException {
+        public UserNotFoundException(String username) {
+            super("No user found with username: " + username);
+        }
     }
 
 }
