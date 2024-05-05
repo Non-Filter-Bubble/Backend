@@ -1,5 +1,6 @@
 package com.example.book_service.controller.mybook;
 
+import com.example.book_service.dto.mybook.MybookSaveRequestDto;
 import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
 import com.example.book_service.service.mybook.MybookService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MybookApiController {
     private final MybookService mybookService;
+
+    /* POST : mybook 추가 */
+    @PostMapping("/user/bookbox/mybook/post")
+    public Long save(@RequestBody MybookSaveRequestDto requestDto) {
+        return mybookService.save(requestDto);
+    }
 
     /* PUT : 해당 mybookid 수정*/
     @PutMapping("/user/bookbox/{mybookid}")

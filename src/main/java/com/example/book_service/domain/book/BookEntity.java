@@ -1,4 +1,4 @@
-package com.example.book_service.entity;
+package com.example.book_service.domain.book;
 
 import com.example.book_service.domain.mybook.MybookEntity;
 import jakarta.persistence.*;
@@ -15,9 +15,9 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookid;
 
-    @ManyToOne
-    @JoinColumn(name = "mybookid")
-    private MybookEntity mybook;
+//    @ManyToOne
+//    @JoinColumn(name = "mybookid")
+//    private MybookEntity mybook;
 
 
 

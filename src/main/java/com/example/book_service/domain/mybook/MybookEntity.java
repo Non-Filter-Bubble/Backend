@@ -2,7 +2,7 @@ package com.example.book_service.domain.mybook;
 
 
 import com.example.book_service.domain.bookbox.BookboxEntity;
-import com.example.book_service.entity.BookEntity;
+import com.example.book_service.domain.book.BookEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +34,14 @@ public class MybookEntity {
     public void update(String comment, String review) {
         this.comment = comment;
         this.review = review;
+    }
+
+    @Builder
+    public MybookEntity(BookboxEntity bookbox, BookEntity book, String comment, String review, Boolean evaluation) {
+        this.bookbox = bookbox;
+        this.book = book;
+        this.comment = comment;
+        this.review = review;
+        this.evaluation = evaluation;
     }
 }
