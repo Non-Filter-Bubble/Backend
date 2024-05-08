@@ -53,10 +53,3 @@ jobs:
             sudo docker rm my-spring-container || true
             sudo docker run -d --name my-spring-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
 
-      - name: Call External API
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-        run: |
-          ./gradlew bootRun
-
