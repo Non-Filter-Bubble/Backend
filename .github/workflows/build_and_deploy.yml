@@ -53,3 +53,11 @@ jobs:
             sudo docker rm my-spring-container || true
             sudo docker run -d --name my-spring-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
 
+        - name: Use API Key and Base URL
+          run: |
+            echo "Using API Key: $API_KEY"
+            echo "Using Base URL: $API_BASE_URL"
+          env:
+            API_KEY: ${{ secrets.API_KEY }}
+            API_BASE_URL: ${{ secrets.API_BASE_URL }}
+
