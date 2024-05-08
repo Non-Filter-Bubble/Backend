@@ -15,7 +15,7 @@ public class ApiResponse{
     @JsonProperty("PAGE_NO")
     private String pageNo;
 
-    
+
     @Override
     public String toString() {
         return "ApiResponse{" +
