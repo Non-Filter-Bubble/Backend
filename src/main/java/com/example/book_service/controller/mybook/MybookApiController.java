@@ -45,4 +45,6 @@ public class MybookApiController {
     public String delete(@PathVariable Long mybookid) {
         return mybookService.delete(mybookid);
     }
+
+
 }
