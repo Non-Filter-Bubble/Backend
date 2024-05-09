@@ -36,4 +36,8 @@ public class GenreService {
         genreEntity.setFavBookType(genrePreferencesDTO.getFavBookType()); // 같은 방식으로 책 유형도 처리
         genrePreferenceRepository.save(genreEntity);
     }
+
+    public boolean isDatabaseEmpty() {
+        return genrePreferenceRepository.count() != 0;
+    }
 }
