@@ -15,6 +15,8 @@ public class BookDetails {
     private String AUTHOR;
     @JsonProperty("PUBLISHER")
     private String PUBLISHER;
+    @JsonProperty("EA_ISBN")
+    private String ISBN;
 
     @Override
     public String toString() {
@@ -22,6 +24,7 @@ public class BookDetails {
                 "title='" + TITLE + '\'' +
                 ", author='" + AUTHOR + '\'' +
                 ", publisher='" + PUBLISHER + '\'' +
+                ", isbn='" + ISBN + '\'' +
                 '}';
     }
 }
