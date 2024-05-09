@@ -34,6 +34,17 @@ public class UserController {
             return ResponseEntity.badRequest().body("Nickname is already taken");
         }
     }
+    @GetMapping("/user/check-password")
+    public ResponseEntity<?> checkPasswordAvailability(
+            @RequestParam(value = "username") String username,
+            @RequestParam(value = "password") String password) {
+        boolean isAvailable = userService.checkPassword(username, password);
+        if (isAvailable) {
+            return ResponseEntity.ok("Password is correct");
+        } else {
+            return ResponseEntity.badRequest().body("Password is wrong");
+        }
+    }
 
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(@RequestParam(value = "username") String username) {

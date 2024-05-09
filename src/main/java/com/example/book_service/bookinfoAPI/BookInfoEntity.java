@@ -21,4 +21,7 @@ public class BookInfoEntity {
 
     @JsonProperty("BOOK_COVER_URL")
     private String bookCoverUrl;
+
+    private BookDetails additionalDetails;  // 이 클래스는 외부 API로부터 받은 정보를 저장
+
 }

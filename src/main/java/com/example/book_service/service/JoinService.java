@@ -62,7 +62,7 @@ public class JoinService {
 
         /* 북서랍 생성 */
         int userid = savedUser.getUserid();
-        final String[] Genre = {"novel", "science", "humanities", "poetry", "self_impro", "economics"};   // 책 장르 저장 배열
+        final String[] Genre = {"소설", "과학", "인문", "시/에세이", "자기계발", "경제/경영"};   // 책 장르 저장 배열
                                 // 소설, 자연과학, 인문, 시/에세이, 자기계발, 경제/경영
 
         // 장르별 북서랍 생성

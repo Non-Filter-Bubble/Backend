@@ -32,6 +32,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	// swagger ui
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
