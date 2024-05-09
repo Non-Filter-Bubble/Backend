@@ -4,6 +4,7 @@ import com.example.book_service.entity.UserEntity;
 import com.example.book_service.repository.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,18 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public boolean checkPassword(String username, String password){
+        UserEntity user = userRepository.findByUsername(username);
+        if (user==null){
+            return false;
+        }
+
+        return passwordEncoder.matches(password,user.getPassword());
+    }
 
     public boolean isUsernameAvailable(String username) {
 
