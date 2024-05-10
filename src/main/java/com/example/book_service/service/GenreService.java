@@ -4,18 +4,23 @@ import com.example.book_service.dto.GenrePreferencesDTO;
 import com.example.book_service.entity.GenreEntity;
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.repository.GenrePreferenceRepository;
+import com.example.book_service.repository.GenreRepository;
 import com.example.book_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GenreService {
 
     private final GenrePreferenceRepository genrePreferenceRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Autowired
     public GenreService(GenrePreferenceRepository genrePreferenceRepository, UserRepository userRepository) {
@@ -37,7 +42,8 @@ public class GenreService {
         genrePreferenceRepository.save(genreEntity);
     }
 
-    public boolean isDatabaseEmpty() {
-        return genrePreferenceRepository.count() != 0;
+    public boolean checkUserGenreExists(int userId) {
+        Optional<GenreEntity> genre = genreRepository.findByUserUserid(userId);
+        return genre.isPresent();
     }
 }

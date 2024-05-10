@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -16,6 +18,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
 
     public boolean checkPassword(String username, String password){
         UserEntity user = userRepository.findByUsername(username);
@@ -54,4 +58,12 @@ public class UserService {
         }
     }
 
+    public int getUserIdByUsername(String username) throws Exception {
+        UserEntity user = userRepository.findByUsername(username);
+        if (user != null) {
+            return user.getUserid();
+        } else {
+            throw new Exception("User not found with username: " + username);
+        }
+    }
 }

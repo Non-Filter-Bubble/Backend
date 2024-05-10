@@ -103,7 +103,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login","/","/search-books", "/join","/user/check-nickname","/user/check-username","/load-books", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // 로그인 페이지와 일부 페이지는 모든 사용자에게 허용
-                        .requestMatchers("/admin","/genre","/user/**","/verify-password").hasRole("USER")
+                        .requestMatchers("/admin","/genre","/user/**","/verify-password","/verify-genre").hasRole("USER")
                         .anyRequest().authenticated()); //로그인한 사용자만 접근
 
         http
