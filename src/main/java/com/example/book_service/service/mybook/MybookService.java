@@ -4,14 +4,12 @@ package com.example.book_service.service.mybook;
 import com.example.book_service.bookinfoAPI.ApiResponse;
 import com.example.book_service.bookinfoAPI.BookClient;
 import com.example.book_service.bookinfoAPI.BookDetails;
-import com.example.book_service.domain.book.BookRepository;
 import com.example.book_service.domain.bookbox.BookboxEntity;
 import com.example.book_service.domain.bookbox.BookboxRepository;
 import com.example.book_service.domain.mybook.MybookEntity;
 import com.example.book_service.domain.mybook.MybookRepository;
 import com.example.book_service.dto.mybook.MybookSaveRequestDto;
 import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
-import com.example.book_service.domain.book.BookEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ import reactor.core.publisher.Mono;
 public class MybookService {
     public final BookboxRepository bookboxRepository;
     public final MybookRepository mybookRepository;
-    public final BookRepository bookRepository;
     private final BookClient bookClient;
 
     @Transactional
