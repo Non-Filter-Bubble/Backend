@@ -13,25 +13,23 @@ import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
 public class MybookService {
     public final BookboxRepository bookboxRepository;
     public final MybookRepository mybookRepository;
-    private final BookClient bookClient;
 
     @Transactional
     public Long save(MybookSaveRequestDto requestDto) {
 
         // bookboxid 값으로 BookboxEntity 조회
         BookboxEntity bookbox = bookboxRepository.findById(requestDto.getBookboxid())
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException("Bookbox with id " + requestDto.getBookboxid() + " not found"));
 
         // ISBN 중복 체크
         if (mybookRepository.existsByBookboxAndIsbn(bookbox, requestDto.getIsbn())) {
-            throw new IllegalArgumentException("ISBN already exists in this bookbox. 이미 존재하는 책입니다.");
+            throw new IllegalArgumentException("ISBN already exists in this bookbox. 이미 추가한 책입니다.");
         }
 
         MybookEntity mybook = requestDto.toEntity(bookbox);

@@ -7,6 +7,7 @@ import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
 import com.example.book_service.service.bookbox.BookboxService;
 import com.example.book_service.service.mybook.MybookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,20 @@ public class BookboxApiController {
 
 
     /* POST : 북서랍 생성 */
-    @Operation(summary = "북서랍 생성")
+    @Operation(summary = "북서랍 생성",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "등록된 bookboxid를 반환"),
+            })
     @PostMapping("user/bookbox/post")
     public Long save(@RequestBody BookboxSaveRequestDto requestDto) {
         return bookboxService.save(requestDto);
     }
 
     /* GET : 북서랍 조회 */
-    @Operation(summary = "북서랍 조회")
+    @Operation(summary = "북서랍 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "해당 북서랍 조회"),
+            })
     @GetMapping("/user/bookbox/{bookboxid}")
     public BookboxResponseDto findById(@PathVariable Long bookboxid) {
         return bookboxService.findById(bookboxid);
@@ -42,7 +49,10 @@ public class BookboxApiController {
 //    }
 
     /* GET : 해당 user의 북서랍에 속한 모든 책을 장르별로 그룹화하여 조회 */
-    @Operation(summary = "해당 user의 북서랍에 속한 모든 책들을 장르별로 그룹화하여 조회")
+    @Operation(summary = "해당 user의 북서랍에 속한 모든 책들을 장르별로 그룹화하여 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "해당 user의 북서랍에 속한 모든 책들을 장르별로 그룹화하여 반환"),
+            })
     @GetMapping("/user/bookbox/all/{userid}")
     public Map<String, List<Long>> findMybookIdsByUserId(@PathVariable int userid) {
         return bookboxService.findMybooksByUserIdAndGroupByGenre(userid);
