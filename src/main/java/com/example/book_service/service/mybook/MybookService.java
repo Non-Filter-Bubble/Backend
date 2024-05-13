@@ -1,14 +1,15 @@
 package com.example.book_service.service.mybook;
 
 
-import com.example.book_service.domain.book.BookRepository;
+import com.example.book_service.bookinfoAPI.ApiResponse;
+import com.example.book_service.bookinfoAPI.BookClient;
+import com.example.book_service.bookinfoAPI.BookDetails;
 import com.example.book_service.domain.bookbox.BookboxEntity;
 import com.example.book_service.domain.bookbox.BookboxRepository;
 import com.example.book_service.domain.mybook.MybookEntity;
 import com.example.book_service.domain.mybook.MybookRepository;
 import com.example.book_service.dto.mybook.MybookSaveRequestDto;
 import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
-import com.example.book_service.domain.book.BookEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,24 @@ import org.springframework.stereotype.Service;
 public class MybookService {
     public final BookboxRepository bookboxRepository;
     public final MybookRepository mybookRepository;
-    public final BookRepository bookRepository;
 
     @Transactional
     public Long save(MybookSaveRequestDto requestDto) {
+
+        // bookboxid 값으로 BookboxEntity 조회
         BookboxEntity bookbox = bookboxRepository.findById(requestDto.getBookboxid())
-                .orElseThrow(() -> new IllegalArgumentException());
-        BookEntity book = bookRepository.findById(requestDto.getBookid())
-                .orElseThrow(() -> new IllegalArgumentException());
-        MybookEntity mybook = requestDto.toEntity(bookbox, book);
+                .orElseThrow(() -> new IllegalArgumentException("Bookbox with id " + requestDto.getBookboxid() + " not found"));
+
+        // ISBN 중복 체크
+        if (mybookRepository.existsByBookboxAndIsbn(bookbox, requestDto.getIsbn())) {
+            throw new IllegalArgumentException("ISBN already exists in this bookbox. 이미 추가한 책입니다.");
+        }
+
+        MybookEntity mybook = requestDto.toEntity(bookbox);
+
+        System.out.println("Mybook created successfully");
         return mybookRepository.save(mybook).getMybookid();
+
     }
 
 
