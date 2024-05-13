@@ -12,8 +12,9 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-    @RestController
+@RestController
     public class BookController {
         private static final Logger logger = LoggerFactory.getLogger(BookController.class);
         private final BookLoader bookLoader;
@@ -26,10 +27,17 @@ import java.util.List;
         }
 
         @GetMapping("/load-books")
-        public ResponseEntity<List<BookInfoEntity>> loadBooks() {
-            // IOException 제거
-            List<BookInfoEntity> books = bookLoader.loadBooks("/share_best_books_data.json");
-            return ResponseEntity.ok(books);
+        public ResponseEntity<BookInfoEntity> loadBookByIsbn(@RequestParam("isbn") Long isbn) {
+
+                // IOException 제거
+                List<BookInfoEntity> books = bookLoader.loadBooks("/share_best_books_data.json");
+                for (BookInfoEntity book : books) {
+                    // ISBN을 문자열로 변환하여 비교
+                    if (String.valueOf(book.getIsbnThirteenNo()).equals(String.valueOf(isbn))) {
+                        return ResponseEntity.ok(book);
+                    }
+                }
+                return ResponseEntity.notFound().build();
         }
         @GetMapping("/search-books")
         public Mono<ApiResponse> searchBooks(
