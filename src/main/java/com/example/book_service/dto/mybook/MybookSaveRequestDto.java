@@ -3,7 +3,6 @@ package com.example.book_service.dto.mybook;
 
 import com.example.book_service.domain.bookbox.BookboxEntity;
 import com.example.book_service.domain.mybook.MybookEntity;
-import com.example.book_service.domain.book.BookEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

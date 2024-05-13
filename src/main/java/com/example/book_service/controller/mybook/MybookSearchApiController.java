@@ -1,6 +1,5 @@
 package com.example.book_service.controller.mybook;
 
-import com.example.book_service.dto.book.BookResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

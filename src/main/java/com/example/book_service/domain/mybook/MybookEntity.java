@@ -3,7 +3,6 @@ package com.example.book_service.domain.mybook;
 
 import com.example.book_service.bookinfoAPI.BookInfoEntity;
 import com.example.book_service.domain.bookbox.BookboxEntity;
-import com.example.book_service.domain.book.BookEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,10 +20,6 @@ public class MybookEntity {
     @ManyToOne
     @JoinColumn(name = "bookboxid") // BookboxEntity 자동 생성된 ID 값을 참조하는 외래 키
     private BookboxEntity bookbox;
-
-//    @ManyToOne
-//    @JoinColumn(name = "bookid", unique = true) // BookEntity의 ID 값을 참조하는 외래 키
-//    private BookEntity book;
 
     private Long isbn;
 
