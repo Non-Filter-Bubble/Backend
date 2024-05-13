@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface MybookRepository  extends JpaRepository<MybookEntity,Long> {
     List<MybookEntity> findAllByBookbox(BookboxEntity bookbox);
+    boolean existsByBookboxAndIsbn(BookboxEntity bookbox, Long isbn);
+
 }
