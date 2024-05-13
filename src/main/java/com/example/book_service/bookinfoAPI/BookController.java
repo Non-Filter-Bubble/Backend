@@ -27,13 +27,9 @@ import java.util.List;
 
         @GetMapping("/load-books")
         public ResponseEntity<List<BookInfoEntity>> loadBooks() {
-            try {
-                List<BookInfoEntity> books = bookLoader.loadBooks("share_best_books_data.json");
-                return ResponseEntity.ok(books);
-            } catch (IOException e) {
-                logger.error("Error loading books: ", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            // IOException 제거
+            List<BookInfoEntity> books = bookLoader.loadBooks("/share_best_books_data.json");
+            return ResponseEntity.ok(books);
         }
         @GetMapping("/search-books")
         public Mono<ApiResponse> searchBooks(
