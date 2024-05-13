@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@Setter
 public class BookDetails {
     @JsonProperty("TITLE")
     private String TITLE;
