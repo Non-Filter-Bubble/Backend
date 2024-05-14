@@ -2,12 +2,17 @@ package com.example.book_service.controller.mybook;
 
 import com.example.book_service.dto.mybook.MybookSaveRequestDto;
 import com.example.book_service.dto.mybook.MybookUpdateRequestDto;
+import com.example.book_service.entity.UserEntity;
+import com.example.book_service.service.UserService;
 import com.example.book_service.service.mybook.MybookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MybookApiController {
     private final MybookService mybookService;
+    @Autowired
+    private UserService userService;
 
     /* POST : mybook 추가 */
     @Operation(summary = "mybook 생성",
@@ -25,7 +32,13 @@ public class MybookApiController {
             })
 
     @PostMapping("/user/bookbox/mybook/post")
-    public Long save(@RequestBody MybookSaveRequestDto requestDto) {
+    public Long save(@RequestBody MybookSaveRequestDto requestDto) throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        int userId = userService.getUserIdByUsername(username);
+        // 요청 DTO에 사용자 ID 설정
+        requestDto.setUserid(userId);
         return mybookService.save(requestDto);
     }
 
@@ -35,7 +48,7 @@ public class MybookApiController {
                     @ApiResponse(responseCode = "200", description = "수정 완료된 mybookid를 반환")
             })
     @PutMapping("/user/bookbox/{mybookid}")
-    public Long update(@PathVariable Long mybookid, @RequestBody MybookUpdateRequestDto requestDto) {
+    public Long update(@PathVariable("mybookid") Long mybookid, @RequestBody MybookUpdateRequestDto requestDto) {
         return mybookService.update(mybookid, requestDto);
     }
 
