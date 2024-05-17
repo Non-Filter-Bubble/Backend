@@ -3,6 +3,7 @@ package com.example.book_service.domain.mybook;
 
 import com.example.book_service.bookinfoAPI.BookInfoEntity;
 import com.example.book_service.domain.bookbox.BookboxEntity;
+import com.example.book_service.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,13 +35,15 @@ public class MybookEntity {
     private String author;
     private String publisher;
 
+    private int userid; // 유저 ID
+
     public void update(String comment, String review) {
         this.comment = comment;
         this.review = review;
     }
 
     @Builder
-    public MybookEntity(BookboxEntity bookbox, Long isbn, String comment, String review, Boolean evaluation, String title, String author, String publisher) {
+    public MybookEntity(BookboxEntity bookbox, Long isbn, String comment, String review, Boolean evaluation, String title, String author, String publisher,int userid) {
         this.bookbox = bookbox;
         this.isbn = isbn;
         this.comment = comment;
@@ -49,5 +52,6 @@ public class MybookEntity {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
+        this.userid = userid;
     }
 }

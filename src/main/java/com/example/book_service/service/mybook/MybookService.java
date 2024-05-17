@@ -40,12 +40,14 @@ public class MybookService {
     }
 
 
+    @Transactional
     public Long update(Long mybookid, MybookUpdateRequestDto requestDto) {
         MybookEntity mybook = mybookRepository.findById(mybookid)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "해당 mybookid=" + mybookid + "가 존재하지 않습니다."
                 ));
         mybook.update(requestDto.getComment(), requestDto.getReview());
+        mybookRepository.save(mybook);
         return mybookid;
     }
 
