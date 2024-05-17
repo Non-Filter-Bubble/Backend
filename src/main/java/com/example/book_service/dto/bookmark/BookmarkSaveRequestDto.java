@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class BookmarkSaveRequestDto {
-    int userid;
-    Long isbn;
-    Boolean main_screen_selected = false;
-    Boolean search_screen_selected = false;
-
+    private int userid;
+    private Long isbn;
+    private Boolean main_screen_selected = false;
+    private Boolean search_screen_selected = false;
     @Builder
     public BookmarkSaveRequestDto(int userid, Long isbn, Boolean main_screen_selected, Boolean search_screen_selected) {
         this.userid = userid;
@@ -30,5 +29,15 @@ public class BookmarkSaveRequestDto {
                 .main_screen_selected(main_screen_selected)
                 .search_screen_selected(search_screen_selected)
                 .build();
+    }
+
+
+
+    public void setUserId(int userid) {
+        this.userid = userid;
+    }
+
+    public int getUserId() {
+        return this.userid;
     }
 }

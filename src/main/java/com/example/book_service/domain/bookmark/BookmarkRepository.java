@@ -10,4 +10,5 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Long> 
 
     boolean existsByUserAndIsbn(UserEntity user, Long isbn);
 
+
 }
