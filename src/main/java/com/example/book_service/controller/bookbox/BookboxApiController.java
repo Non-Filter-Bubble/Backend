@@ -62,8 +62,11 @@ public class BookboxApiController {
                     @ApiResponse(responseCode = "200", description = "해당 user의 북서랍에 속한 모든 책들을 장르별로 그룹화하여 반환"),
             })
     @GetMapping("/user/bookbox/all")
-    public Map<String, List<Long>> findMybookIdsByUserId(@PathVariable("userid") int userid) {
-        return bookboxService.findMybooksByUserIdAndGroupByGenre(userid);
+    public Map<String, List<Long>> findMybookIdsByUserId(@RequestHeader(name = "Authorization") String token) throws Exception {
+        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String username = jwtUtil.getUsername(cleanedToken);
+        int userId = userService.getUserIdByUsername(username);
+        return bookboxService.findMybooksByUserIdAndGroupByGenre(userId);
     }
 //    public ResponseEntity<?> verifyGenre(@RequestHeader("Authorization") String token) {
 //        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
@@ -71,7 +74,7 @@ public class BookboxApiController {
 
 
 
-
+    //북박스 조회(userid로)
     @GetMapping("/user/bookboxid")
     public ResponseEntity<?> verifyGenre(@RequestHeader("Authorization") String token) throws Exception {
         String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
@@ -89,5 +92,7 @@ public class BookboxApiController {
         }
         return ResponseEntity.ok(bookBoxInfoList);
     }
+
+    //북박스 조회(bookboxid로)
 
 }

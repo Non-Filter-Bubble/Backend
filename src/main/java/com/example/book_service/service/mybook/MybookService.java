@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MybookService {
@@ -58,5 +60,10 @@ public class MybookService {
                 ));
         mybookRepository.delete(mybook);
         return "delete complete.";
+    }
+
+
+    public List<MybookEntity> getBooksByUserid(int userId) {
+        return mybookRepository.findByUserid(userId);
     }
 }
