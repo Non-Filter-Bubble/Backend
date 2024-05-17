@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -46,8 +45,8 @@ public class BestsellerApiController {
 
     @Operation(summary = "각 장르에 대한 베스트셀러 목록 조회")
     @Parameter(name="genre", description = "책의 장르")
-    @GetMapping("/bestseller/{genre}")
-    public Mono<List<BestsellerDetails>> getBooks(@PathVariable String genre) {
+    @GetMapping("/bestseller")
+    public Mono<List<BestsellerDetails>> getBooks(@RequestParam("genre") String genre) {
         // 현재 날짜 정보를 가져와 연도, 월, 주차를 계산
         LocalDate date = LocalDate.now();
         int year = date.getYear();
