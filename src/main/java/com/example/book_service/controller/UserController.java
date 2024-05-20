@@ -1,5 +1,9 @@
 package com.example.book_service.controller;
 
+import com.example.book_service.JWT.JWTUtil;
+import com.example.book_service.dto.UserUpdateRequestDto;
+import com.example.book_service.dto.mybook.UserResponseDto;
+import com.example.book_service.entity.UserEntity;
 import com.example.book_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    private final JWTUtil jwtUtil;
+
+    public UserController(JWTUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     //username 중복 확인
     @GetMapping("/user/check-username")
@@ -51,6 +60,26 @@ public class UserController {
         userService.deleteUser(username);
         return ResponseEntity.ok().build(); // 성공적으로 처리되었을 때 HTTP 200 OK 응답 반환
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserResponseDto> getUserDetails(@RequestHeader(name = "Authorization") String token) {
+        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String username = jwtUtil.getUsername(cleanedToken);
+        UserEntity user = userService.getUserByUsername(username);
+        UserResponseDto userResponseDto = new UserResponseDto(user);
+        return ResponseEntity.ok(userResponseDto);
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<String> updateUser(@RequestHeader(name = "Authorization") String token,
+                                             @RequestBody UserUpdateRequestDto userUpdateRequestDto) throws Exception {
+        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String username = jwtUtil.getUsername(cleanedToken);
+
+        userService.updateUser(username, userUpdateRequestDto);
+        return ResponseEntity.ok("User details updated successfully");
+    }
+
 
 
 }

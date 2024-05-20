@@ -1,9 +1,11 @@
 package com.example.book_service.service;
 
+import com.example.book_service.dto.UserUpdateRequestDto;
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.repository.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +16,14 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
 
@@ -66,4 +72,39 @@ public class UserService {
             throw new Exception("User not found with username: " + username);
         }
     }
+
+    public UserEntity getUserByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+        return user;
+    }
+
+
+    public void updateUser(String username, UserUpdateRequestDto userUpdateRequestDto) {
+        // 사용자 엔티티 가져오기
+        UserEntity user = getUserByUsername(username);
+
+        // 업데이트할 필드 설정
+        if (userUpdateRequestDto.getNickname() != null) {
+            user.setNickname(userUpdateRequestDto.getNickname());
+        }
+
+        // 새로운 비밀번호를 설정하고 기존의 비밀번호와 일치하는지 확인
+        if (userUpdateRequestDto.getNewPassword() != null) {
+            String currentPassword = userUpdateRequestDto.getCurrentPassword();
+            String newPassword = userUpdateRequestDto.getNewPassword();
+
+            if (passwordEncoder.matches(currentPassword, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(newPassword));
+            } else {
+                throw new IllegalArgumentException("Current password does not match.");
+            }
+        }
+
+        // 변경 내용 저장소에 반영
+        userRepository.save(user);
+    }
+
 }

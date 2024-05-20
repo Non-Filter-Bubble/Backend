@@ -31,15 +31,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-//        //클라이언트 요청에서 username, password 가로채기
-//        String username = obtainUsername(request);
-//        String password = obtainPassword(request);
-//
-//        System.out.println(username);
-//
-//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-//
-//        return authenticationManager.authenticate(authToken);
+
         try {
             LoginDTO credentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -63,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username,role,60*60*1000L);
+        String token = jwtUtil.createJwt(username,role,60*1000L);
 
         response.addHeader("Authorization","Bearer " + token);
 
