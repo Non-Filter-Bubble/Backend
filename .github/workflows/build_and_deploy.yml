@@ -53,4 +53,6 @@ jobs:
             sudo docker rm my-spring-container || true
             sudo docker run -d --name my-spring-container -p 8080:8080 \
               -e SPRING_JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e API_BASE_URL=${{ secrets.API_BASE_URL }} \
+              -e API_KEY=${{ secrets.API_KEY }} \
               ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
