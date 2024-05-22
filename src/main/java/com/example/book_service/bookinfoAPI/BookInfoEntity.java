@@ -16,7 +16,7 @@ public class BookInfoEntity {
     @JsonProperty("GENRE_LV2")
     private String genreLv2;
 
-    @JsonProperty("INFO_TEXT")
+    @JsonProperty("INFO_TEXT_BOLD")
     private String infoText;
 
     @JsonProperty("BOOK_COVER_URL")
