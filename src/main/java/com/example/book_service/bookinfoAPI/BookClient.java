@@ -33,6 +33,7 @@ public class BookClient {
                             .queryParam("cert_key", apiKey) // API 키를 쿼리 파라미터로 추가
                             .queryParam("result_style", "json")
                             .queryParam("page_no", 1)
+                            .queryParam("order_by","DESC")
                             .queryParam("page_size", 10)
                             .queryParam("form", "종이책")
                             .queryParam(type, value)
