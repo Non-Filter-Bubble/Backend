@@ -7,7 +7,7 @@ public class Example {
     public static void main(String[] args) {
         // WebClient를 생성
         WebClient webClient = WebClient.create();
-        String fastapiUrl = "http://fastapi-server:8000/test"; // FastAPI 서버의 엔드포인트 URL
+        String fastapiUrl = "http://43.200.64.238:8000/test"; // FastAPI 서버의 엔드포인트 URL
 
         // 보낼 문자열
         String message = "Hello from Spring!";
