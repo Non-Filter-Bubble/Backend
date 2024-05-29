@@ -21,6 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     }
 }
+
 //        // FastAPI CORS 설정
 //        registry.addMapping("/**")
 //                .allowedOrigins("http://43.200.64.238") // FastAPI 애플리케이션의 도메인
