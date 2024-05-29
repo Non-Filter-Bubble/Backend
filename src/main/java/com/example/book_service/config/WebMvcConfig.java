@@ -17,7 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://43.203.38.124","http://43.200.64.238:8000") // react 애플리케이션의 도메인
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD") // 허용할 HTTP 메서드 설정
                 .allowedHeaders("*")
-                .exposedHeaders("Authorization")
                 .allowCredentials(true);    // 자격 증명 허용 여부 설정
 
     }
