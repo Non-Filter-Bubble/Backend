@@ -22,42 +22,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-//public class SecurityConfig extends WebSecurityConfiguration{
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws  Exception{
-//        http
-//                .formLogin()
-//                .loginPage("/loginPage")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login")
-//                .usernameParameter("username")
-//                .passwordParameter("passwd")
-//                .loginProcessingUrl("/login_proc")
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                        System.out.println("austhentication"+ authentication.getName());
-//                        response.sendRedirect("/");
-//                    }
-//                })
-//                .failureHandler(new AuthenticationFailureHandler() {
-//                    @Override
-//                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-//                        System.out.println("exception" + exception.getMessage());
-//                        response.sendRedirect("/login");
-//                    }
-//                })
-//                .permitAll();
-//
-//    }
-//}
-public class SecurityConfig {
+
+public class SecurityConfig extends WebSecurityConfiguration{
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -120,6 +95,17 @@ public class SecurityConfig {
 
         return http.build();
 
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://43.203.38.124")); // React 앱의 주소
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
