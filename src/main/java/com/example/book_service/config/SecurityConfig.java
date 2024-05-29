@@ -31,8 +31,37 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-
-public class SecurityConfig extends WebSecurityConfiguration{
+//public class SecurityConfig extends WebSecurityConfiguration{
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws  Exception{
+//        http
+//                .formLogin()
+//                .loginPage("/loginPage")
+//                .defaultSuccessUrl("/")
+//                .failureUrl("/login")
+//                .usernameParameter("username")
+//                .passwordParameter("passwd")
+//                .loginProcessingUrl("/login_proc")
+//                .successHandler(new AuthenticationSuccessHandler() {
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                        System.out.println("austhentication"+ authentication.getName());
+//                        response.sendRedirect("/");
+//                    }
+//                })
+//                .failureHandler(new AuthenticationFailureHandler() {
+//                    @Override
+//                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+//                        System.out.println("exception" + exception.getMessage());
+//                        response.sendRedirect("/login");
+//                    }
+//                })
+//                .permitAll();
+//
+//    }
+//}
+public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -78,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfiguration{
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login","/","/search-books", "/join","/user/check-nickname","/user/check-username","/load-books","/bestseller/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**", "/test" ).permitAll() // 로그인 페이지와 일부 페이지는 모든 사용자에게 허용
-                        .requestMatchers("/admin","/genre","/user/**","/verify-password","/verify-genre").hasRole("USER")
+                        .requestMatchers("/admin","/genre","/user/**","/verify-password","/verify-genre","/ai/*").hasRole("USER")
                         .anyRequest().authenticated()); //로그인한 사용자만 접근
 
         http
@@ -100,13 +129,13 @@ public class SecurityConfig extends WebSecurityConfiguration{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://43.203.38.124")); // React 앱의 주소
+        configuration.setAllowedOrigins(Arrays.asList("http://43.203.38.124"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization")); // 노출할 헤더 설정
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
 }
-
