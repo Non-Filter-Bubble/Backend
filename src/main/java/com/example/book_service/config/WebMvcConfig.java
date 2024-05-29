@@ -16,7 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")  // 모든 경로에 대해 CORS 적용
                 .allowedOrigins("http://43.203.38.124") // react 애플리케이션의 도메인
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드 설정
-                .allowedHeaders("*")
+                .allowedHeaders("Authorization", "Content-Type", "Accept")
                 .allowCredentials(true);    // 자격 증명 허용 여부 설정
 
     }
