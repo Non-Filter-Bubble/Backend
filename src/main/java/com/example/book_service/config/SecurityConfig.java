@@ -1,66 +1,21 @@
 package com.example.book_service.config;
 
-//import com.example.book_service.JWT.JWTFilter;
 import com.example.book_service.JWT.JWTFilter;
 import com.example.book_service.JWT.JWTUtil;
 import com.example.book_service.JWT.LoginFilter;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-//public class SecurityConfig extends WebSecurityConfiguration{
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws  Exception{
-//        http
-//                .formLogin()
-//                .loginPage("/loginPage")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login")
-//                .usernameParameter("username")
-//                .passwordParameter("passwd")
-//                .loginProcessingUrl("/login_proc")
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                        System.out.println("austhentication"+ authentication.getName());
-//                        response.sendRedirect("/");
-//                    }
-//                })
-//                .failureHandler(new AuthenticationFailureHandler() {
-//                    @Override
-//                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-//                        System.out.println("exception" + exception.getMessage());
-//                        response.sendRedirect("/login");
-//                    }
-//                })
-//                .permitAll();
-//
-//    }
-//}
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
