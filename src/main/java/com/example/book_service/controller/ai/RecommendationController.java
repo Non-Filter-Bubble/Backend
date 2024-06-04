@@ -56,7 +56,6 @@ public class RecommendationController {
 }
 
 
-
 //            JSONObject requestBody = new JSONObject();
 //            requestBody.put("user_id", userId);
 //            JSONArray genresArray = new JSONArray(favoriteGenres);
