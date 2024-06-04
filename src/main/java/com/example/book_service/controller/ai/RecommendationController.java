@@ -1,25 +1,21 @@
 package com.example.book_service.controller.ai;
 
 import com.example.book_service.JWT.JWTUtil;
-import com.example.book_service.entity.UserEntity;
+
 import com.example.book_service.service.GenreService;
 import com.example.book_service.service.UserService;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.book_service.entity.GenreEntity;
+
 
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/recommend")
@@ -55,7 +51,7 @@ public class RecommendationController {
     }
 }
 
-
+//
 //            JSONObject requestBody = new JSONObject();
 //            requestBody.put("user_id", userId);
 //            JSONArray genresArray = new JSONArray(favoriteGenres);
