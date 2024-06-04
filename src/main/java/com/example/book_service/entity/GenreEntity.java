@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -28,5 +29,9 @@ public class GenreEntity {
 
     public void setFavBookType(List<String> bookTypes) {
         this.favBookType = String.join(", ", bookTypes); // 리스트를 쉼표로 구분된 문자열로 결합
+    }
+
+    public List<String> getFavGenreList() {
+        return Arrays.asList(favGenre.split(", "));
     }
 }

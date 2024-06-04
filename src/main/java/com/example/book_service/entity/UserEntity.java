@@ -45,5 +45,9 @@ public class UserEntity {
                 ", role='" + role + '\'' +
                 '}';
     }
+
+    public List<GenreEntity> getGenres() {
+        return genre;
+    }
 }
 

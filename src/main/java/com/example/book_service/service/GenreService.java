@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GenreService {
@@ -45,5 +46,10 @@ public class GenreService {
     public boolean checkUserGenreExists(int userId) {
         Optional<GenreEntity> genre = genreRepository.findByUserUserid(userId);
         return genre.isPresent();
+    }
+    public List<String> getFavoriteGenresByUserId(int userid) {
+        return genreRepository.findAllByUserUserid(userid).stream()
+                .flatMap(genreEntity -> genreEntity.getFavGenreList().stream())
+                .collect(Collectors.toList());
     }
 }
