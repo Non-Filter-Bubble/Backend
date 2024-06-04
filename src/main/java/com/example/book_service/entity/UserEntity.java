@@ -36,6 +36,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookboxEntity> bookbox = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserRecommendation> userRecommendations = new ArrayList<>();
+
 
     @Override
     public String toString() {
