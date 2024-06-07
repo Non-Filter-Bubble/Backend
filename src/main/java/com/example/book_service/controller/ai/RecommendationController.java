@@ -42,7 +42,7 @@ public class RecommendationController {
     @Autowired
     private UserRecommendationService userRecommendationService;
 
-    private final WebClient webClient = WebClient.create("http://3.37.204.233:8000/ai/books"); // AI 서비스 URL
+    private final WebClient webClient = WebClient.create("http://localhost:8000/ai/books"); // AI 서비스 URL
 
     @GetMapping
     public ResponseEntity<?> getRecommendations(@RequestHeader("Authorization") String token) {
@@ -86,28 +86,28 @@ public class RecommendationController {
 
 
 
-            if (response != null) {
-                UserRecommendation userRecommendation = new UserRecommendation();
-                userRecommendation.setUser(user);
-
-                // IsbnNonFilter 및 IsbnFilter 엔티티의 리스트로 변환하여 설정
-                List<IsbnNonFilter> isbnNonFilterList = convertIsbnListToIsbnNonFilterList(response.getIsbn_nonfilter());
-                List<IsbnFilter> isbnFilterList = convertIsbnListToIsbnFilterList(response.getIsbn_filter());
-
-                userRecommendation.setIsbnNonFilter(isbnNonFilterList);
-                userRecommendation.setIsbnFilter(isbnFilterList);
-
-                // 각 IsbnNonFilter 및 IsbnFilter 엔티티에 대한 참조 설정
-                for (IsbnNonFilter isbnNonFilter : isbnNonFilterList) {
-                    isbnNonFilter.setUserRecommendation(userRecommendation);
-                }
-
-                for (IsbnFilter isbnFilter : isbnFilterList) {
-                    isbnFilter.setUserRecommendation(userRecommendation);
-                }
-
-                userRecommendationService.saveUserRecommendation(userRecommendation);
-            }
+//            if (response != null) {
+//                UserRecommendation userRecommendation = new UserRecommendation();
+//                userRecommendation.setUser(user);
+//
+//                // IsbnNonFilter 및 IsbnFilter 엔티티의 리스트로 변환하여 설정
+//                List<IsbnNonFilter> isbnNonFilterList = convertIsbnListToIsbnNonFilterList(response.getIsbn_nonfilter());
+//                List<IsbnFilter> isbnFilterList = convertIsbnListToIsbnFilterList(response.getIsbn_filter());
+//
+//                userRecommendation.setIsbnNonFilter(isbnNonFilterList);
+//                userRecommendation.setIsbnFilter(isbnFilterList);
+//
+//                // 각 IsbnNonFilter 및 IsbnFilter 엔티티에 대한 참조 설정
+//                for (IsbnNonFilter isbnNonFilter : isbnNonFilterList) {
+//                    isbnNonFilter.setUserRecommendation(userRecommendation);
+//                }
+//
+//                for (IsbnFilter isbnFilter : isbnFilterList) {
+//                    isbnFilter.setUserRecommendation(userRecommendation);
+//                }
+//
+//                userRecommendationService.saveUserRecommendation(userRecommendation);
+//            }
 
 
             return ResponseEntity.ok(response);
