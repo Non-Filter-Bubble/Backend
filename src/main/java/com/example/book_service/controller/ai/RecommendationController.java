@@ -44,7 +44,7 @@ public class RecommendationController {
     @Autowired
     private UserRecommendationService userRecommendationService;
 
-    private final WebClient webClient = WebClient.create("http://3.37.204.23:8000/ai/books"); // AI 서비스 URL
+    private final WebClient webClient = WebClient.create("http://3.37.204.233:8000/ai/books"); // AI 서비스 URL
 
     @GetMapping
     public ResponseEntity<?> getRecommendations(@RequestHeader("Authorization") String token) {
