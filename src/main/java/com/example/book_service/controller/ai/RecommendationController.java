@@ -52,10 +52,10 @@ public class RecommendationController {
 //            int userId = userService.getUserIdByUsername(username);
             UserEntity user = userService.getUserByUsername(username);
 
-            // user_id가 중복되는지 확인하고 중복된 경우 에러 반환
-            if (userRecommendationService.existsByUserId(user.getUserid())) {
-                return ResponseEntity.status(400).body("UserRecommendation with user_id already exists");
-            }
+//            // user_id가 중복되는지 확인하고 중복된 경우 에러 반환
+//            if (userRecommendationService.existsByUserId(user.getUserid())) {
+//                return ResponseEntity.status(400).body("UserRecommendation with user_id already exists");
+//            }
 
 
             List<String> favoriteGenres = genreService.getFavoriteGenresByUserId(user.getUserid());
@@ -114,7 +114,7 @@ public class RecommendationController {
         } catch (WebClientResponseException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("An error occurred");
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
 
