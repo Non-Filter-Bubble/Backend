@@ -1,5 +1,6 @@
-package com.example.book_service.entity;
+package com.example.book_service.entity.UserRecommendation;
 
+import com.example.book_service.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +19,11 @@ public class UserRecommendation {
     @JoinColumn(name = "userid",nullable = false) // UserEntity의 자동 생성된 ID 값을 참조하는 외래 키
     private UserEntity user;
 
-    @ElementCollection
-    private List<Long> isbnNonFilter;
+    @OneToMany(mappedBy = "userRecommendation", cascade = CascadeType.ALL)
+    private List<IsbnNonFilter> isbnNonFilter;
 
-    @ElementCollection
-    private List<Long> isbnFilter;
+    @OneToMany(mappedBy = "userRecommendation", cascade = CascadeType.ALL)
+    private List<IsbnFilter> isbnFilter;
+
+    // Getter and Setter
 }

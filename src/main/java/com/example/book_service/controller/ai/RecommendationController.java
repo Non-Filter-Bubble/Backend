@@ -4,18 +4,16 @@ import com.example.book_service.JWT.JWTUtil;
 
 import com.example.book_service.dto.RecommendationResponse;
 import com.example.book_service.entity.UserEntity;
-import com.example.book_service.entity.UserRecommendation;
+import com.example.book_service.entity.UserRecommendation.IsbnFilter;
+import com.example.book_service.entity.UserRecommendation.IsbnNonFilter;
+import com.example.book_service.entity.UserRecommendation.UserRecommendation;
 import com.example.book_service.service.AI.UserRecommendationService;
 import com.example.book_service.service.GenreService;
 import com.example.book_service.service.UserService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONObject;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +23,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -54,6 +52,12 @@ public class RecommendationController {
 //            int userId = userService.getUserIdByUsername(username);
             UserEntity user = userService.getUserByUsername(username);
 
+            // user_id가 중복되는지 확인하고 중복된 경우 에러 반환
+            if (userRecommendationService.existsByUserId(user.getUserid())) {
+                return ResponseEntity.status(400).body("UserRecommendation with user_id already exists");
+            }
+
+
             List<String> favoriteGenres = genreService.getFavoriteGenresByUserId(user.getUserid());
 
             System.out.println("userId : " + user.getUserid());
@@ -80,17 +84,30 @@ public class RecommendationController {
 
             System.out.println("Response from AI service: " + response);
 
-//            if (response != null) {
-//                UserRecommendation userRecommendation = new UserRecommendation();
-//                userRecommendation.setUser(user);
-//                List<Long> isbnNonfilter = response.getIsbn_nonfilter();
-//                List<Long> isbnFilter = response.getIsbn_filter();
-//
-//
-//                userRecommendationService.saveUserRecommendation(userRecommendation);
-//
-//                System.out.println("isbnNonfilter from AI service: " + isbnNonfilter);
-//            }
+
+
+            if (response != null) {
+                UserRecommendation userRecommendation = new UserRecommendation();
+                userRecommendation.setUser(user);
+
+                // IsbnNonFilter 및 IsbnFilter 엔티티의 리스트로 변환하여 설정
+                List<IsbnNonFilter> isbnNonFilterList = convertIsbnListToIsbnNonFilterList(response.getIsbn_nonfilter());
+                List<IsbnFilter> isbnFilterList = convertIsbnListToIsbnFilterList(response.getIsbn_filter());
+
+                userRecommendation.setIsbnNonFilter(isbnNonFilterList);
+                userRecommendation.setIsbnFilter(isbnFilterList);
+
+                // 각 IsbnNonFilter 및 IsbnFilter 엔티티에 대한 참조 설정
+                for (IsbnNonFilter isbnNonFilter : isbnNonFilterList) {
+                    isbnNonFilter.setUserRecommendation(userRecommendation);
+                }
+
+                for (IsbnFilter isbnFilter : isbnFilterList) {
+                    isbnFilter.setUserRecommendation(userRecommendation);
+                }
+
+                userRecommendationService.saveUserRecommendation(userRecommendation);
+            }
 
 
             return ResponseEntity.ok(response);
@@ -100,29 +117,30 @@ public class RecommendationController {
             return ResponseEntity.status(500).body("An error occurred");
         }
     }
+
+    // Long 형식의 ISBN 목록을 IsbnNonFilter 엔티티의 리스트로 변환하는 메서드
+    private List<IsbnNonFilter> convertIsbnListToIsbnNonFilterList(List<Long> isbnList) {
+        List<IsbnNonFilter> result = new ArrayList<>();
+        for (Long isbn : isbnList) {
+            IsbnNonFilter isbnNonFilter = new IsbnNonFilter();
+            isbnNonFilter.setIsbn(isbn);
+            result.add(isbnNonFilter);
+        }
+        return result;
+    }
+
+    // Long 형식의 ISBN 목록을 IsbnFilter 엔티티의 리스트로 변환하는 메서드
+    private List<IsbnFilter> convertIsbnListToIsbnFilterList(List<Long> isbnList) {
+        List<IsbnFilter> result = new ArrayList<>();
+        for (Long isbn : isbnList) {
+            IsbnFilter isbnFilter = new IsbnFilter();
+            isbnFilter.setIsbn(isbn);
+            result.add(isbnFilter);
+        }
+        return result;
+    }
 }
 
-//
-//            JSONObject requestBody = new JSONObject();
-//            requestBody.put("user_id", userId);
-//            JSONArray genresArray = new JSONArray(favoriteGenres);
-//            requestBody.put("genres", genresArray);
-//
-//            // AI 엔드포인트로 POST 요청 보내기
-//            Map<String, Object> response = webClient.post()
-//                    .uri("/books")
-//                    .bodyValue(requestBody.toString()) // JSON 문자열로 변환하여 보냄
-//                    .retrieve()
-//                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-//                    .block();
-//
-//
-//            return ResponseEntity.ok(response);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-//        }
-//    }
-//}
 
 
 

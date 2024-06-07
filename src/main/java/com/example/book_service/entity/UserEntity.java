@@ -2,6 +2,7 @@ package com.example.book_service.entity;
 
 import com.example.book_service.domain.bookbox.BookboxEntity;
 import com.example.book_service.domain.bookmark.BookmarkEntity;
+import com.example.book_service.entity.UserRecommendation.UserRecommendation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
