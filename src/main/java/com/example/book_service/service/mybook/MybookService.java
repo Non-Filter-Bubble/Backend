@@ -72,9 +72,13 @@ public class MybookService {
     }
 
     public List<String> getCommentsByIsbn(Long isbn) {
+        if (isbn == null) {
+            throw new IllegalArgumentException("ISBN is not exist");
+        }
+
         List<MybookEntity> mybookEntities = mybookRepository.findByIsbn(isbn);
         if (mybookEntities.isEmpty()) {
-            return Collections.singletonList("No comment found for the given ISBN");
+            throw new RuntimeException("No comments found for the given ISBN");
         } else {
             return mybookEntities.stream()
                     .map(MybookEntity::getComment)
