@@ -14,13 +14,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class MybookService {
     public final BookboxRepository bookboxRepository;
     public final MybookRepository mybookRepository;
+
 
     @Transactional
     public Long save(MybookSaveRequestDto requestDto) {
@@ -66,4 +70,15 @@ public class MybookService {
     public List<MybookEntity> getBooksByUserid(int userId) {
         return mybookRepository.findByUserid(userId);
     }
+
+    public List<String> getCommentsByIsbn(Long isbn) {
+        List<MybookEntity> mybookEntities = mybookRepository.findByIsbn(isbn);
+        if (mybookEntities.isEmpty()) {
+            return Collections.singletonList("No comment found for the given ISBN");
+        } else {
+            return mybookEntities.stream()
+                    .map(MybookEntity::getComment)
+                    .collect(Collectors.toList());
+        }
+        }
 }
