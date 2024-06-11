@@ -19,6 +19,8 @@ public class BookDetails {
     @JsonProperty("EA_ISBN")
     private String ISBN;
 
+
+
     @Override
     public String toString() {
         return "BookInfo{" +
