@@ -55,4 +55,7 @@ jobs:
               -e SPRING_JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e API_BASE_URL=${{ secrets.API_BASE_URL }} \
               -e API_KEY=${{ secrets.API_KEY }} \
+              -e NAVER_API_URL=${{ secrets.NAVER_API_URL }} \
+              -e NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }} \
+              -e NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }} \
               ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
     public class BookController {
-        private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+//        private static final Logger logger = LoggerFactory.getLogger(BookController.class);
         private final BookLoader bookLoader;
         private final BookClient bookClient;
 
