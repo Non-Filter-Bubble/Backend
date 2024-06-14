@@ -1,21 +1,24 @@
 package com.example.book_service.controller;
 
 import com.example.book_service.JWT.JWTUtil;
-import com.example.book_service.dto.AIData.UserIsbnResponseDto;
+//import com.example.book_service.dto.AIData.UserIsbnResponseDto;
 import com.example.book_service.dto.UserUpdateRequestDto;
 import com.example.book_service.dto.mybook.UserResponseDto;
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.entity.UserRecommendation.UserRecommendation;
-import com.example.book_service.service.AI.UserRecommendationService;
+//import com.example.book_service.service.AI.UserRecommendationService;
+import com.example.book_service.service.BookService;
 import com.example.book_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.book_service.entity.UserRecommendation.IsbnNonFilter;
 import com.example.book_service.entity.UserRecommendation.IsbnFilter;
-import com.example.book_service.service.AI.UserRecommendationService;
+//import com.example.book_service.service.AI.UserRecommendationService;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -29,7 +32,10 @@ public class UserController {
     private final JWTUtil jwtUtil;
 
     @Autowired
-    private UserRecommendationService userRecommendationService;
+    private BookService bookService;
+
+//    @Autowired
+//    private UserRecommendationService userRecommendationService;
 
     public UserController(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -94,30 +100,36 @@ public class UserController {
         return ResponseEntity.ok("User details updated successfully");
     }
 
-
     @GetMapping("/user/isbn_list")
-    public ResponseEntity<UserIsbnResponseDto> getUserIsbnList(@RequestHeader(name = "Authorization") String token) {
-        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String username = jwtUtil.getUsername(cleanedToken);
-        UserEntity user = userService.getUserByUsername(username);
-
-        UserRecommendation userRecommendation = userRecommendationService.getUserRecommendation(user);
-
-        List<Long> isbnNonFilterList = userRecommendation.getIsbnNonFilter().stream()
-                .map(IsbnNonFilter::getIsbn) // IsbnNonFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
-                .collect(Collectors.toList());
-
-        List<Long> isbnFilterList = userRecommendation.getIsbnFilter().stream()
-                .map(IsbnFilter::getIsbn) // IsbnFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
-                .collect(Collectors.toList());
-
-        UserIsbnResponseDto isbnResponseDto = new UserIsbnResponseDto();
-        isbnResponseDto.setUsername(username);
-        isbnResponseDto.setIsbnNonFilter(isbnNonFilterList);
-        isbnResponseDto.setIsbnFilter(isbnFilterList);
-
-
-        return ResponseEntity.ok(isbnResponseDto);
+    public Map<String, Object> getIsbnList() throws IOException {
+        return bookService.getIsbnList();
     }
+
+
+    //사용자의 추천 isbn db에서 불러오기
+//    @GetMapping("/user/isbn_list")
+//    public ResponseEntity<UserIsbnResponseDto> getUserIsbnList(@RequestHeader(name = "Authorization") String token) {
+//        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+//        String username = jwtUtil.getUsername(cleanedToken);
+//        UserEntity user = userService.getUserByUsername(username);
+//
+//        UserRecommendation userRecommendation = userRecommendationService.getUserRecommendation(user);
+//
+//        List<Long> isbnNonFilterList = userRecommendation.getIsbnNonFilter().stream()
+//                .map(IsbnNonFilter::getIsbn) // IsbnNonFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
+//                .collect(Collectors.toList());
+//
+//        List<Long> isbnFilterList = userRecommendation.getIsbnFilter().stream()
+//                .map(IsbnFilter::getIsbn) // IsbnFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
+//                .collect(Collectors.toList());
+//
+//        UserIsbnResponseDto isbnResponseDto = new UserIsbnResponseDto();
+//        isbnResponseDto.setUsername(username);
+//        isbnResponseDto.setIsbnNonFilter(isbnNonFilterList);
+//        isbnResponseDto.setIsbnFilter(isbnFilterList);
+//
+//
+//        return ResponseEntity.ok(isbnResponseDto);
+//    }
 
 }
