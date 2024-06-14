@@ -11,7 +11,7 @@ import java.net.URI;
 
 @Component
 public class BookClient {
-    private WebClient webClient;
+    private final WebClient webClient;
     private final String apiKey;
 
     public BookClient(@Value("${api.base.url}") String baseUrl,
