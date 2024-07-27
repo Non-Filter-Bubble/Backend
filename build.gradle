@@ -42,6 +42,9 @@ dependencies {
 
 
 
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.1'
+
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
