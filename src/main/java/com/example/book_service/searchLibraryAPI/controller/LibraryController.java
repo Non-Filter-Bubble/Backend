@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+
 @RestController
 public class LibraryController {
+
     @Autowired
     private LibraryService libraryService;
 
@@ -17,7 +19,7 @@ public class LibraryController {
     }
 
     @GetMapping("/searchLibraryByBook")
-    public Mono<String> getExternalApiResponse(@RequestParam(name="isbn") long isbn, @RequestParam(name = "region") long region) {
+    public Mono<com.example.book_service.searchLibraryAPI.dto.LibraryResponseDTO> getExternalApiResponse(@RequestParam(name = "isbn") long isbn, @RequestParam(name = "region") long region) {
         return libraryService.searchLibraryByBook(isbn, region);
     }
 }

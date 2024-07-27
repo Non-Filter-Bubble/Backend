@@ -1,5 +1,8 @@
 package com.example.book_service.searchLibraryAPI.controller;
 
+import com.example.book_service.searchLibraryAPI.dto.LibraryResponseDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,18 +18,20 @@ public class LibraryService {
     private final WebClient webClient;
     private final String apiKey;
     private final String apiUrl; // 기본 URL을 저장할 변수
+    private final XmlMapper xmlMapper;
 
     public LibraryService(@Value("${library.api.url}") String apiUrl,
                           @Value("${library.api.key}") String apiKey) {
         this.apiUrl = apiUrl; // 기본 URL 초기화
         this.webClient = WebClient.builder()
                 .baseUrl(apiUrl) // 기본 URL 설정
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML_VALUE) // 기본 Accept 헤더 설정
+                .defaultHeader(HttpHeaders.ACCEPT, "application/xml") // 기본 Accept 헤더 설정
                 .build();
         this.apiKey = apiKey;
+        this.xmlMapper = new XmlMapper(); // XmlMapper 초기화
     }
 
-    public Mono<String> searchLibraryByBook(long isbn, long region) {
+    public Mono<LibraryResponseDTO> searchLibraryByBook(long isbn, long region) {
         try {
             // UriComponentsBuilder를 사용하여 URL을 직접 생성하고 로그로 출력
             String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
@@ -34,6 +39,7 @@ public class LibraryService {
                     .queryParam("authKey", apiKey)
                     .queryParam("isbn", isbn)
                     .queryParam("region", region)
+                    .queryParam("format", "xml")
                     .toUriString();
             System.out.println("Generated URL: " + url); // 로그로 URL 출력
 
@@ -43,22 +49,24 @@ public class LibraryService {
                             .queryParam("authKey", apiKey)
                             .queryParam("isbn", isbn)
                             .queryParam("region", region)
+                            .queryParam("format", "xml")
                             .build()) // URI 빌더로 URL 설정
-                    .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML_VALUE) // 요청마다 Accept 헤더 추가
+                    .header(HttpHeaders.ACCEPT, "application/xml") // 요청마다 Accept 헤더 추가
                     .retrieve()
                     .onStatus(
                             status -> status.is4xxClientError() || status.is5xxServerError(),
                             clientResponse -> clientResponse.bodyToMono(String.class)
                                     .flatMap(body -> Mono.error(new RuntimeException("API call failed with status: " + clientResponse.statusCode() + " and response: " + body)))
                     )
-                    .bodyToMono(String.class) // XML 응답을 String으로 받음
-                    .flatMap(xmlResponse -> {
+                    .bodyToMono(String.class)
+                    .map(response -> {
                         try {
                             // XML을 JSON으로 변환
-                            String jsonResponse = XmlToJsonConverter.convertXmlToJson(xmlResponse);
-                            return Mono.just(jsonResponse);
+                            JsonNode jsonNode = xmlMapper.readTree(response);
+                            // JSON을 LibraryResponseDTO로 변환
+                            return xmlMapper.treeToValue(jsonNode, LibraryResponseDTO.class);
                         } catch (Exception e) {
-                            return Mono.error(new RuntimeException("Failed to convert XML to JSON", e));
+                            throw new RuntimeException("Failed to parse XML response", e);
                         }
                     })
                     .doOnNext(response -> System.out.println("Received response: " + response))
