@@ -24,6 +24,22 @@ import java.util.List;
             this.bookClient = bookClient;
         }
 
+//    @GetMapping("/load-books")
+//    public ResponseEntity<BookInfoEntity> loadBookByIsbn(@RequestParam("isbn") String isbn) {
+//        try {
+//            long isbnLong = Long.parseLong(isbn);
+//            List<BookInfoEntity> books = bookLoader.loadBooks("/share_best_books_data.json");
+//            for (BookInfoEntity book : books) {
+//                if (book.getIsbnThirteenNo() == isbnLong) {
+//                    return ResponseEntity.ok(book);
+//                }
+//            }
+//        } catch (NumberFormatException e) {
+//            return ResponseEntity.badRequest().build();  // 잘못된 ISBN이 전달된 경우
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
+
         @GetMapping("/load-books")
         public ResponseEntity<BookInfoEntity> loadBookByIsbn(@RequestParam("isbn") Long isbn) {
 
