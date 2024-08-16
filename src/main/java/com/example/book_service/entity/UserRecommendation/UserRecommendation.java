@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+
 public class UserRecommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
