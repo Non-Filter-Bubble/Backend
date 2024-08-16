@@ -14,8 +14,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         // React CORS 설정
         registry.addMapping("/**")  // 모든 경로에 대해 CORS 적용
-//                .allowedOrigins("http://43.203.38.124") // react 애플리케이션의 도메인
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("http://s3-nonfilterbubble-react.s3-website.ap-northeast-2.amazonaws.com") // react 애플리케이션의 도메인
+//                .allowedOrigins("http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS", "HEAD") // 허용할 HTTP 메서드 설정
                 .allowedHeaders("*")  // 모든 헤더를 허용
                 .exposedHeaders("Authorization")
