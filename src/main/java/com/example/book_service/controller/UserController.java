@@ -2,11 +2,13 @@ package com.example.book_service.controller;
 
 import com.example.book_service.JWT.JWTUtil;
 //import com.example.book_service.dto.AIData.UserIsbnResponseDto;
+import com.example.book_service.dto.AIData.UserIsbnResponseDto;
 import com.example.book_service.dto.UserUpdateRequestDto;
 import com.example.book_service.dto.mybook.UserResponseDto;
 import com.example.book_service.entity.UserEntity;
 import com.example.book_service.entity.UserRecommendation.UserRecommendation;
 //import com.example.book_service.service.AI.UserRecommendationService;
+import com.example.book_service.service.AI.UserRecommendationService;
 import com.example.book_service.service.BookService;
 import com.example.book_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.example.book_service.entity.UserRecommendation.IsbnFilter;
 //import com.example.book_service.service.AI.UserRecommendationService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,8 +37,8 @@ public class UserController {
     @Autowired
     private BookService bookService;
 
-//    @Autowired
-//    private UserRecommendationService userRecommendationService;
+    @Autowired
+    private UserRecommendationService userRecommendationService;
 
     public UserController(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -100,36 +103,45 @@ public class UserController {
         return ResponseEntity.ok("User details updated successfully");
     }
 
-    @GetMapping("/user/isbn_list")
-    public Map<String, Object> getIsbnList() throws IOException {
-        return bookService.getIsbnList();
-    }
+//    @GetMapping("/user/isbn_list")
+//    public Map<String, Object> getIsbnList() throws IOException {
+//        return bookService.getIsbnList();
+//    }
 
 
     //사용자의 추천 isbn db에서 불러오기
-//    @GetMapping("/user/isbn_list")
-//    public ResponseEntity<UserIsbnResponseDto> getUserIsbnList(@RequestHeader(name = "Authorization") String token) {
-//        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-//        String username = jwtUtil.getUsername(cleanedToken);
-//        UserEntity user = userService.getUserByUsername(username);
-//
-//        UserRecommendation userRecommendation = userRecommendationService.getUserRecommendation(user);
-//
-//        List<Long> isbnNonFilterList = userRecommendation.getIsbnNonFilter().stream()
-//                .map(IsbnNonFilter::getIsbn) // IsbnNonFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
-//                .collect(Collectors.toList());
-//
-//        List<Long> isbnFilterList = userRecommendation.getIsbnFilter().stream()
-//                .map(IsbnFilter::getIsbn) // IsbnFilter 클래스가 isbn을 반환하는 getIsbn 메서드를 가진다고 가정합니다.
-//                .collect(Collectors.toList());
-//
-//        UserIsbnResponseDto isbnResponseDto = new UserIsbnResponseDto();
-//        isbnResponseDto.setUsername(username);
-//        isbnResponseDto.setIsbnNonFilter(isbnNonFilterList);
-//        isbnResponseDto.setIsbnFilter(isbnFilterList);
-//
-//
-//        return ResponseEntity.ok(isbnResponseDto);
-//    }
+    @GetMapping("/user/isbn_list")
+    public ResponseEntity<UserIsbnResponseDto> getUserIsbnList(@RequestHeader(name = "Authorization") String token) {
+        // JWT 토큰에서 username 추출
+        String cleanedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String username = jwtUtil.getUsername(cleanedToken);
+
+        // username으로 UserEntity 조회
+        UserEntity user = userService.getUserByUsername(username);
+
+        // user에 해당하는 UserRecommendation 리스트 조회
+        List<UserRecommendation> recommendations = userRecommendationService.findByUser(user);
+
+        // ISBN 리스트 초기화
+        List<Long> isbnFilterList = new ArrayList<>();
+        List<Long> isbnNonFilterList = new ArrayList<>();
+
+        // 각 UserRecommendation에 대해 ISBN 추가
+        for (UserRecommendation recommendation : recommendations) {
+            // IsbnFilter에서 ISBN 수집
+            recommendation.getIsbnFilter().forEach(isbnFilter -> isbnFilterList.add(isbnFilter.getIsbn()));
+
+            // IsbnNonFilter에서 ISBN 수집
+            recommendation.getIsbnNonFilter().forEach(isbnNonFilter -> isbnNonFilterList.add(isbnNonFilter.getIsbn()));
+        }
+
+        // Response DTO 생성
+        UserIsbnResponseDto responseDto = new UserIsbnResponseDto();
+        responseDto.setIsbn_nonfilter(isbnNonFilterList);
+        responseDto.setIsbn_filer(isbnFilterList);
+
+        return ResponseEntity.ok(responseDto);
+    }
+
 
 }
